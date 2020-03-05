@@ -1,16 +1,13 @@
-# REST API using Spring Boot + Solr + Docker
-
-## This application exposes details of more than 13,800 Indian Towns via REST Endpoints
+# REST API using Spring Boot + Solr + war + docker
 
 ## Description:
 
-I used **Apache Solr** to persist the data about Indian towns. **Docker** is used for setting up Solr. We also used **Spring Boot** to develop simple REST application which access Solr & expose the data via endpoints
-
-## Disclaimer: 
-
-Indian town details are collected from Internet. Hence, I don't stand for authenticity of the information. I have kept the source file I used for indexing Solr (in CSV format) under resource directory. 
-
-You can use find them here - [Indian Towns Details in CSV](https://github.com/iamvickyav/SpringBoot-Solr-Using-Docker/tree/master/src/main/resources/solr_index_source)
+1. solr image(solr-app) and application artifact(IndianTownsAPI.war) in tomcat image(app) are packaged together as 2 services in docker-compose.yml
+2. Dockerfile has the steps to copy the generated war file and start tomcat. dockerfile tag is used in docker-compose.yml file to use Dockerfile
+3. application.properties has spring.data.solr.host=http://**solr-app**:8983/solr to refer the solr-app image name.
+4. This example has references to network concept in docker
+5. packaging type used is war and it is copied into image's /usr/local/tomcat/webapps path
+6. depends_on is specified as "solr-app" used so that tomcat image is built and dependent on "solr-app" image. 
 
 ## Setup:
 
@@ -18,15 +15,11 @@ You can use find them here - [Indian Towns Details in CSV](https://github.com/ia
  - [Install Docker](https://docs.docker.com/install/) 
  - Once installed, start the Docker application in your system
  - Once started, run the following commands
-```
-> cd src/Docker/
-> docker-compose up
-```
- - Go back to Project root folder
-```
-> mvn clean install
-> java -jar target/IndianTownsAPI-0.0.1-SNAPSHOT.jar
-```
+ 
+ ```
+ > mvn clean install
+> docker-compose up --build
+ ```
 
 **Thats it !!!** 
 ### Setup verification:
@@ -37,7 +30,7 @@ You can verify the success of setup by visiting http://localhost:8983/solr in yo
 ### REST Endpoints
 
 ```
-http://localhost:8080/india/town/all
+http://localhost:8080/india/town/all?page=0&size=1
 
 http://localhost:8080/india/town/paged/search?page=10&size=0&district=porbandar&state=gujarat
 
