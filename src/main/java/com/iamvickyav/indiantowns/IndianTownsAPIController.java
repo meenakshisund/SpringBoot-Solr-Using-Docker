@@ -17,6 +17,11 @@ public class IndianTownsAPIController {
     @Autowired
     IndianTownRepo repo;
 
+    @RequestMapping("/success")
+    public String getSuccess(){
+        return "success";
+    }
+
     @RequestMapping(value = "/india/town/all", method = RequestMethod.GET)
     Page<IndianTown> findAllIndianTown(@RequestParam(required = true) Integer page, @RequestParam(required = true) Integer size) {
         Page<IndianTown> pagedResult = repo.findAll(new PageRequest(page, size));
