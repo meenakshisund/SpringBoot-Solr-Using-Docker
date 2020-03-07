@@ -1,4 +1,4 @@
-FROM openjdk:11
-COPY target/IndianTownsAPI.jar IndianTownsAPI.jar
+FROM tomcat:latest
+COPY target/IndianTownsAPI.war /usr/local/tomcat/webapps/IndianTownsAPI.war
 EXPOSE 8080
-CMD ["java","-jar","IndianTownsAPI.jar"]
+CMD ["catalina.sh","run"]
